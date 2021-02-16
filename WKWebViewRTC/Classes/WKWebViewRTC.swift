@@ -36,7 +36,7 @@ public class WKWebViewRTC : NSObject {
     
 
 	// This is just called if <param name="onload" value="true" /> in plugin.xml.
-    @objc(init) public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
+    public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
 		NSLog("WKWebViewRTC#init()")
         super.init()
 
