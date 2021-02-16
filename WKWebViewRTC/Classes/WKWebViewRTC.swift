@@ -80,7 +80,7 @@ public class WKWebViewRTC : NSObject {
         contentController?.add(self, name: "native_console_log")
 	}
     
-    func setWebView(webview:WKWebView?)
+    public func setWebView(webview:WKWebView?)
     {
         self.webView = webview
         self.webView!.isOpaque = false
