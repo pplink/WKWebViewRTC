@@ -12,6 +12,7 @@ import AVFoundation
 import WebRTC
 import WebKit
 
+@objc(WKWebViewRTC)
 public class WKWebViewRTC : NSObject {
 	// RTCPeerConnectionFactory single instance.
 	var rtcPeerConnectionFactory: RTCPeerConnectionFactory!
@@ -35,7 +36,7 @@ public class WKWebViewRTC : NSObject {
     
 
 	// This is just called if <param name="onload" value="true" /> in plugin.xml.
-    public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
+    @objc(init) public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
 		NSLog("WKWebViewRTC#init()")
         super.init()
 
@@ -79,7 +80,7 @@ public class WKWebViewRTC : NSObject {
         contentController?.add(self, name: "native_console_log")
 	}
     
-    func setWebView(webview:WKWebView?)
+    @objc(setWebView) func setWebView(webview:WKWebView?)
     {
         self.webView = webview
         self.webView!.isOpaque = false
@@ -109,7 +110,7 @@ public class WKWebViewRTC : NSObject {
 		}
 	}
 
-    public func dispose() {
+    @objc(dispose) public func dispose() {
         self.cleanup()
         
         self.contentController?.removeAllUserScripts()
