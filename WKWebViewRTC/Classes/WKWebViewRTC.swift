@@ -37,17 +37,16 @@ public class WKWebViewRTC : NSObject {
     
 
 	// This is just called if <param name="onload" value="true" /> in plugin.xml.
-    public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
-		NSLog("WKWebViewRTC#init()")
-        super.init()
+    @objc(initWithWebView:contentController:) public func initWith(wkwebview:WKWebView?, contentController: WKUserContentController?) {
+        NSLog("WKWebViewRTC#init()")
 
-		// Make the web view transparent
+        // Make the web view transparent
 
-		pluginMediaStreams = [:]
-		pluginMediaStreamTracks = [:]
-		pluginMediaStreamRenderers = [:]
-		queue = DispatchQueue(label: "wkwebview-iosrtc", attributes: [])
-		pluginRTCPeerConnections = [:]
+        pluginMediaStreams = [:]
+        pluginMediaStreamTracks = [:]
+        pluginMediaStreamRenderers = [:]
+        queue = DispatchQueue(label: "wkwebview-iosrtc", attributes: [])
+        pluginRTCPeerConnections = [:]
 
         setWebView(webview: wkwebview)
         
@@ -55,31 +54,33 @@ public class WKWebViewRTC : NSObject {
         if let path = Bundle(for: type(of: self)).path(forResource: "jsWKWebViewRTC", ofType: "js") {
             if let bindingJS = try? String(contentsOfFile: path, encoding: .utf8) {
                 let script = WKUserScript(source: bindingJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-                self.contentController?.addUserScript(script)
+                contentController?.addUserScript(script)
             }
         }
-		else {
-			NSLog("Failed to add iosrtc script")
-			return
-		}
+        else {
+            NSLog("Failed to add iosrtc script")
+            return
+        }
         
-		// Initialize DTLS stuff.
-		RTCInitializeSSL()
-		//RTCSetMinDebugLogLevel(RTCLoggingSeverity.warning)
+        // Initialize DTLS stuff.
+        RTCInitializeSSL()
+        //RTCSetMinDebugLogLevel(RTCLoggingSeverity.warning)
 
-		// Create a RTCPeerConnectionFactory.
-		self.initPeerConnectionFactory();
+        // Create a RTCPeerConnectionFactory.
+        self.initPeerConnectionFactory();
 
-		// Create a PluginGetUserMedia instance.
-		self.pluginGetUserMedia = iGetUserMedia(
-			rtcPeerConnectionFactory: rtcPeerConnectionFactory
-		)
+        // Create a PluginGetUserMedia instance.
+        self.pluginGetUserMedia = iGetUserMedia(
+            rtcPeerConnectionFactory: rtcPeerConnectionFactory
+        )
 
-		// Create a PluginRTCAudioController instance.
-		self.audioOutputController = iRTCAudioController()
+        // Create a PluginRTCAudioController instance.
+        self.audioOutputController = iRTCAudioController()
         contentController?.add(self, name: "WKWebViewRTC")
         contentController?.add(self, name: "native_console_log")
-	}
+        self.contentController = contentController;
+    }
+    
     
     func setWebView(webview:WKWebView?)
     {
