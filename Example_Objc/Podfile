@@ -1,0 +1,6 @@
+use_frameworks!
+
+target 'WKWebViewRTC_Example_Objc' do
+  pod 'WKWebViewRTC', :path => '../'
+	
+end
