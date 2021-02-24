@@ -13,8 +13,7 @@ import WebRTC
 import WebKit
 
 
-@objc(WKWebViewRTC)
-public class WKWebViewRTC : NSObject {
+@objc public class WKWebViewRTC : NSObject {
 	// RTCPeerConnectionFactory single instance.
 	var rtcPeerConnectionFactory: RTCPeerConnectionFactory!
 	// Single PluginGetUserMedia instance.
@@ -35,13 +34,12 @@ public class WKWebViewRTC : NSObject {
     var webView : WKWebView?
     var contentController: WKUserContentController?
     
-
-	// This is just called if <param name="onload" value="true" /> in plugin.xml.
-    @objc(initWithWebView:contentController:) public func initWith(wkwebview:WKWebView?, contentController: WKUserContentController?) {
+    @objc public init(wkwebview:WKWebView?, contentController: WKUserContentController?) {
         NSLog("WKWebViewRTC#init()")
-
+        super.init()
+        
         // Make the web view transparent
-
+     
         pluginMediaStreams = [:]
         pluginMediaStreamTracks = [:]
         pluginMediaStreamRenderers = [:]
@@ -80,7 +78,6 @@ public class WKWebViewRTC : NSObject {
         contentController?.add(self, name: "native_console_log")
         self.contentController = contentController;
     }
-    
     
     func setWebView(webview:WKWebView?)
     {
