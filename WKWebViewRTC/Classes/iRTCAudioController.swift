@@ -43,6 +43,7 @@ class iRTCAudioController {
 		do {
 			let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
 			try audioSession.setActive(true)
+            iRTCAudioController.selectAudioOutputSpeaker() // shpark for PCA
 		} catch  {
 			print("Error messing with audio session: \(error)")
 		}
@@ -161,12 +162,15 @@ class iRTCAudioController {
 	static private var speakerEnabled: Bool = false
 	
 	init() {
-        let shouldManualInit = Bundle.main.object(forInfoDictionaryKey: "ManualInitAudioDevice") as? String
-    
-        if(shouldManualInit == "FALSE") {
-            iRTCAudioController.initAudioDevices()
-        }
+        // shpark for PCA
+//        let shouldManualInit = Bundle.main.object(forInfoDictionaryKey: "ManualInitAudioDevice") as? String
+//    
+//        if(shouldManualInit == "FALSE") {
+//            iRTCAudioController.initAudioDevices()
+//        }
 		
+        iRTCAudioController.initAudioDevices()
+        
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(self.audioRouteChangeListener(_:)),
@@ -184,6 +188,8 @@ class iRTCAudioController {
 			NSLog("iRTCAudioController#audioRouteChangeListener() | headphone pulled out -> restore state speakerEnabled: %@", iRTCAudioController.speakerEnabled ? "true" : "false")
 			iRTCAudioController.setOutputSpeakerIfNeed(enabled: iRTCAudioController.speakerEnabled)
 		default:
+            // shpark for PCA
+            iRTCAudioController.setOutputSpeakerIfNeed(enabled: iRTCAudioController.speakerEnabled)
 			break
 		}
 	}
