@@ -20,11 +20,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    WKWebViewConfiguration *configuration = [WKWebViewConfiguration new];
-    configuration.allowsInlineMediaPlayback = YES;
-    configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
-    configuration.applicationNameForUserAgent = @"Version/14.0.2 Safari/605.1.15";
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+//    configuration.allowsInlineMediaPlayback = YES;
+//    configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+    //configuration.applicationNameForUserAgent = @"Version/14.0.2 Safari/605.1.15";
+    //onfiguration.applicationNameForUserAgent = @"Version/11.0 Safari/604.1.28";
     //configuration.applicationNameForUserAgent = @"ReactNative";
+    
+    // pageCall 1.0 에서 모바일로 설정하지 않으면 미디어 권한 없음 팝업이 뜬다.
+    if (@available(iOS 13.0, *)) {
+        configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile;
+    }
+    
     self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:configuration];
     [self.view addSubview:self.webView];
     
@@ -47,11 +54,9 @@
 
     // Refresh myView and/or main view
     [self.view layoutIfNeeded];
-        
-    WKWebViewRTC *webViewRTC = [WKWebViewRTC new];
-    [webViewRTC initWithWebView:self.webView contentController:self.webView.configuration.userContentController];
     
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://pplink.net/call_new/testRoomId0223n"]];
+    WKWebViewRTC *webViewRTC = [[WKWebViewRTC alloc] initWithWkwebview:self.webView contentController:self.webView.configuration.userContentController];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://pplink.net/call_new/testMobile0224n"]];
     [self.webView loadRequest:request];    
 }
 
