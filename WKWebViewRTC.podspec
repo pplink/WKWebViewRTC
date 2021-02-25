@@ -21,10 +21,10 @@ Pod::Spec.new do |s|
 	WebRTC library for WKWebView for Swift on iOS (based on cordova-plugin-iosrtc: https://github.com/cordova-rtc/cordova-plugin-iosrtc)
                        DESC
 
-  s.homepage         = 'https://github.com/OpenTelecom/WKWebViewRTC'
+  s.homepage         = 'https://github.com/pplink/WKWebViewRTC'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'OpenTelecom' => 'contact@OpenTele.com' }
-  s.source           = { :git => 'https://github.com/OpenTelecom/WKWebViewRTC.git', :tag => s.version.to_s }
+  s.author           = { 'Park Sehun' => 'sehun@pplink.net' }
+  s.source           = { :git => 'https://github.com/pplink/WKWebViewRTC.git', :branch => 'pagecall-support' :tag => s.version.to_s }
 
 	s.swift_version = '4.2'
   s.ios.deployment_target = '11.0'
