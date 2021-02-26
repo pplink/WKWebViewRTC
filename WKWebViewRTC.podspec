@@ -24,15 +24,16 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/pplink/WKWebViewRTC'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Park Sehun' => 'sehun@pplink.net' }
-  s.source           = { :git => 'https://github.com/pplink/WKWebViewRTC.git', :branch => 'pagecall-support' :tag => s.version.to_s }
+  #s.source           = { :git => 'https://github.com/pplink/WKWebViewRTC.git', :branch => 'pagecall-support' :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/pplink/WKWebViewRTC.git', :branch => 'pagecall-support' }
 
-	s.swift_version = '4.2'
+  s.swift_version = '4.2'
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'WKWebViewRTC/Classes/**/*'
-	s.resources = 'WKWebViewRTC/Js/jsWKWebViewRTC.js'
+  s.resources = 'WKWebViewRTC/Js/jsWKWebViewRTC.js'
+  
+  s.dependency 'GoogleWebRTC', '1.1.29229'
 
-   s.dependency 'GoogleWebRTC', '1.1.29229'
-
-   s.xcconfig       = { 'ENABLE_BITCODE' => 'NO', 'ONLY_ACTIVE_ARCH' => 'Yes' }
+  s.xcconfig       = { 'ENABLE_BITCODE' => 'NO', 'ONLY_ACTIVE_ARCH' => 'Yes' }
 end
