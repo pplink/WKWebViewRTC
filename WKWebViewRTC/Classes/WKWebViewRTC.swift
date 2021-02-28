@@ -116,7 +116,7 @@ import WebKit
         self.webView = nil
     }
     
-	@objc(onReset) func onReset() {
+	@objc(onReset) public func onReset() {
 		NSLog("WKWebViewRTC#onReset() | doing nothing")
 		cleanup();
 	}
