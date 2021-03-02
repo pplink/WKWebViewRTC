@@ -19,7 +19,8 @@ class iRTCAudioController {
 		AVAudioSession.CategoryOptions.mixWithOthers,
 		AVAudioSession.CategoryOptions.allowBluetooth,
 		AVAudioSession.CategoryOptions.allowAirPlay,
-		AVAudioSession.CategoryOptions.allowBluetoothA2DP
+		AVAudioSession.CategoryOptions.allowBluetoothA2DP,
+        AVAudioSession.CategoryOptions.defaultToSpeaker,
 	]
 
 	/*
@@ -27,7 +28,7 @@ class iRTCAudioController {
 
 	  See: https://developer.apple.com/documentation/avfoundation/avaudiosession/mode/1616455-voicechat
 	 */
-	static private var audioMode = AVAudioSession.Mode.voiceChat
+	static private var audioMode = AVAudioSession.Mode.videoChat
 	static private var audioModeDefault : AVAudioSession.Mode = AVAudioSession.Mode.default
 
 	static private var audioInputSelected: AVAudioSessionPortDescription? = nil
@@ -43,7 +44,6 @@ class iRTCAudioController {
 		do {
 			let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
 			try audioSession.setActive(true)
-            iRTCAudioController.selectAudioOutputSpeaker() // shpark for PCA
 		} catch  {
 			print("Error messing with audio session: \(error)")
 		}
@@ -162,13 +162,12 @@ class iRTCAudioController {
 	static private var speakerEnabled: Bool = false
 	
 	init() {
-        // shpark for PCA
-//        let shouldManualInit = Bundle.main.object(forInfoDictionaryKey: "ManualInitAudioDevice") as? String
-//    
-//        if(shouldManualInit == "FALSE") {
+//        let shouldManualInit = Bundle.main.object(forInfoDictionaryKey: "ManualInitAudioDevice") as? Bool
+//        if(shouldManualInit == false) {
 //            iRTCAudioController.initAudioDevices()
 //        }
 		
+        // shpark for PCA
         iRTCAudioController.initAudioDevices()
         
 		NotificationCenter.default.addObserver(
@@ -176,6 +175,13 @@ class iRTCAudioController {
 			selector: #selector(self.audioRouteChangeListener(_:)),
 			name: AVAudioSession.routeChangeNotification,
 			object: nil)
+        
+        /*
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.interruptionListener(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: nil)*/
 	}
 	
 	@objc dynamic fileprivate func audioRouteChangeListener(_ notification:Notification) {
@@ -187,10 +193,32 @@ class iRTCAudioController {
 		case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
 			NSLog("iRTCAudioController#audioRouteChangeListener() | headphone pulled out -> restore state speakerEnabled: %@", iRTCAudioController.speakerEnabled ? "true" : "false")
 			iRTCAudioController.setOutputSpeakerIfNeed(enabled: iRTCAudioController.speakerEnabled)
+        case AVAudioSession.RouteChangeReason.categoryChange.rawValue:
+            NSLog("iRTCAudioController#audioRouteChangeListener() | categoryChange")
 		default:
-            // shpark for PCA
-            iRTCAudioController.setOutputSpeakerIfNeed(enabled: iRTCAudioController.speakerEnabled)
 			break
 		}
+
+        // shpark for PCA
+        iRTCAudioController.initAudioDevices()
 	}
+    
+    @objc dynamic fileprivate func interruptionListener(_ notification:Notification) {
+        let reason = notification.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
+                
+        switch reason {
+        case AVAudioSession.InterruptionType.began.rawValue:
+            NSLog("iRTCAudioController#interruptionListener() | began")
+            let isPlayin = AVAudioSession.sharedInstance().isOtherAudioPlaying
+            if isPlayin {
+                NSLog("iRTCAudioController#interruptionListener() | isOtherAudioPlaying")
+            } else {
+                iRTCAudioController.initAudioDevices()
+            }
+        case AVAudioSession.InterruptionType.ended.rawValue:
+            NSLog("iRTCAudioController#interruptionListener() | ended")
+        default:
+            break
+        }
+    }
 }

@@ -24,7 +24,7 @@ class iMediaStreamTrack : NSObject {
 
 		self.rtcMediaStreamTrack = rtcMediaStreamTrack
 
-        // PCA 2.0에서 failed consumer 에러 발생
+        // shpark PCA 2.0에서 failed consumer 에러 발생
 //		if (trackId == nil) {
 //			// Handle possible duplicate remote trackId with  janus or short duplicate name
 //			// See: https://github.com/cordova-rtc/cordova-plugin-iosrtc/issues/432

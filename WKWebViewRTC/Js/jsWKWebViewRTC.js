@@ -5379,5 +5379,5 @@ function releaseMediaStreamRenderer(video) {
 },{"./MediaStreamRenderer":16,"debug":1}]},{},[32])(32)
 });
 
-// shpark 20210224 create cordova.plugins
+// pagecall shpark create cordova.plugins
 cordova = Object.create({}, { plugins: { value: false } });
