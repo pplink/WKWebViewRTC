@@ -17,10 +17,10 @@ class iRTCAudioController {
 
 	static private var audioCategoryOptions : AVAudioSession.CategoryOptions = [
 		AVAudioSession.CategoryOptions.mixWithOthers,
-		AVAudioSession.CategoryOptions.allowBluetooth,
-		AVAudioSession.CategoryOptions.allowAirPlay,
-		AVAudioSession.CategoryOptions.allowBluetoothA2DP,
-        AVAudioSession.CategoryOptions.defaultToSpeaker,
+        AVAudioSession.CategoryOptions.allowBluetooth,
+        AVAudioSession.CategoryOptions.allowBluetoothA2DP,
+        AVAudioSession.CategoryOptions.allowAirPlay,
+        AVAudioSession.CategoryOptions.defaultToSpeaker
 	]
 
 	/*
@@ -176,15 +176,15 @@ class iRTCAudioController {
 			name: AVAudioSession.routeChangeNotification,
 			object: nil)
         
-        /*
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.interruptionListener(_:)),
             name: AVAudioSession.interruptionNotification,
-            object: nil)*/
+            object: nil)
 	}
 	
 	@objc dynamic fileprivate func audioRouteChangeListener(_ notification:Notification) {
+        NSLog("iRTCAudioController#audioRouteChangeListener()")
 		let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
 		
 		switch audioRouteChangeReason {
@@ -200,21 +200,23 @@ class iRTCAudioController {
 		}
 
         // shpark for PCA
-        iRTCAudioController.initAudioDevices()
+        //iRTCAudioController.initAudioDevices()
+        iRTCAudioController.setCategory()
 	}
     
     @objc dynamic fileprivate func interruptionListener(_ notification:Notification) {
+        NSLog("iRTCAudioController#interruptionListener()")
         let reason = notification.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
-                
+        
         switch reason {
         case AVAudioSession.InterruptionType.began.rawValue:
             NSLog("iRTCAudioController#interruptionListener() | began")
-            let isPlayin = AVAudioSession.sharedInstance().isOtherAudioPlaying
-            if isPlayin {
-                NSLog("iRTCAudioController#interruptionListener() | isOtherAudioPlaying")
-            } else {
-                iRTCAudioController.initAudioDevices()
-            }
+//            let isPlayin = AVAudioSession.sharedInstance().isOtherAudioPlaying
+//            if isPlayin {
+//                NSLog("iRTCAudioController#interruptionListener() | isOtherAudioPlaying")
+//            } else {
+//                iRTCAudioController.initAudioDevices()
+//            }
         case AVAudioSession.InterruptionType.ended.rawValue:
             NSLog("iRTCAudioController#interruptionListener() | ended")
         default:
